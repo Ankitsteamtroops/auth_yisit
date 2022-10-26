@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^3.0.1
   http: ^0.13.5
   email_validator: ^2.1.17
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:

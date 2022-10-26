@@ -5,7 +5,7 @@ import 'package:project_yisit/services/client.dart';
 import 'homepage.dart';
 
 class NewPassword extends StatefulWidget {
-  static String id = "Newpassword";
+
   var email;
   var OtpCode;
   NewPassword({this.email, this.OtpCode});
@@ -28,9 +28,15 @@ class _NewPasswordState extends State<NewPassword> {
       );
       var response =
           await AuthClient().postResetPassword('/reset-password', pass);
+      print(response); // check response
       if (_formkey.currentState!.validate()) {
         //put validation on matching something it will navigate to next screen......
-        Navigator.pushNamed(context, HomePage.id);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
       }
     } catch (e) {
       print(e.toString());

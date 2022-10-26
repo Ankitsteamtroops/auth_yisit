@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:project_yisit/authScreens/homepage.dart';
 import 'package:project_yisit/authScreens/signInPage.dart';
 import '../json/registerJson.dart';
@@ -10,7 +11,7 @@ import '../services/client.dart';
 import 'verificationCode.dart';
 
 class SignUpPage2 extends StatefulWidget {
-  static String id = "SignupPage2";
+  static var userid;
   TextEditingController? parentName;
   TextEditingController? studentname;
   TextEditingController? phoneNo;
@@ -23,6 +24,7 @@ class SignUpPage2 extends StatefulWidget {
 class _SignUpPage2State extends State<SignUpPage2> {
   @override
   var userDataid;
+  var messageEmail;
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController conformpasswordcontroller = TextEditingController();
   TextEditingController parentEmailController = TextEditingController();
@@ -70,31 +72,45 @@ class _SignUpPage2State extends State<SignUpPage2> {
       if (_checkBox) {
         var response = await AuthClient().postRegister('/register', user);
 
-        setState(() {
-          var values = jsonDecode(response);
-          userDataid = values["data"]["userId"];
-          print(userDataid);
-          // final text = "register done";
-          // final snackBar = SnackBar(content: Text(text));
-          // ScaffoldMessenger.of(context).showSnackBar((snackBar));
+        setState(
+          () {
+            var values = jsonDecode(response);
+            print(values);
+            userDataid = values["data"]["userId"];
+            print(userDataid);
+            //
+            messageEmail = values["Message"]["email"];
+            print(messageEmail);
+            //
+            if (userDataid == null) {
+              final text = "$messageEmail";
+              final snackBar = SnackBar(content: Text(text));
+              ScaffoldMessenger.of(context).showSnackBar((snackBar));
+            }
 
-          if ((EmailValidator.validate(parentEmailController.text)) &&
-              _checkBox == true) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => VerificationCode(
-                  uuid: userDataid,
-                  email: parentEmailController.text.toString(),
+            SignUpPage2.userid = userDataid; // done this for forgotten password
+            // final text = "register done";
+            // final snackBar = SnackBar(content: Text(text));
+            // ScaffoldMessenger.of(context).showSnackBar((snackBar));
+
+            if ((EmailValidator.validate(parentEmailController.text)) &&
+                _checkBox == true) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                PageTransition(
+                  child: VerificationCode(
+                    uuid: userDataid,
+                    email: parentEmailController.text.toString(),
+                  ),
+                  type: PageTransitionType.fade,
+                  isIos: true,
+                  duration: Duration(milliseconds: 900),
                 ),
-              ),
-            );
-          }
-          // final text = "verify password ";
-          // final snackBar = SnackBar(content: Text(text));
-          // ScaffoldMessenger.of(context).showSnackBar((snackBar));
-          // return "verify email";
-        });
+                (route) => false,
+              );
+            }
+          },
+        );
       }
     } catch (e) {
       print(e.toString());
@@ -467,9 +483,11 @@ class _SignUpPage2State extends State<SignUpPage2> {
                             ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.pushNamed(
+                            onTap: () => Navigator.push(
                               context,
-                              SignIn.id,
+                              MaterialPageRoute(
+                                builder: (context) => SignIn(),
+                              ),
                             ),
                             child: Container(
                               height: 20,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:project_yisit/authScreens/signUp2.dart';
 
 class SignUpPage extends StatefulWidget {
-  static String id = "signUpPage";
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -17,12 +17,15 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_formkey.currentState!.validate()) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => SignUpPage2(
+        PageTransition(
+          child: SignUpPage2(
             parentName: parentNameController,
             studentname: studentNameController,
             phoneNo: phoneNumberController,
           ),
+          type: PageTransitionType.fade,
+          isIos: true,
+          duration: Duration(milliseconds: 900),
         ),
       );
     }
@@ -92,9 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         validator: (String? value) {
                           if (value!.isEmpty) {
                             return "parent name cannot be empty";
-                          }
-                        
-                          else
+                          } else
                             return null;
                         },
                         controller: parentNameController,

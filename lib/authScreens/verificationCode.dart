@@ -1,16 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:project_yisit/authScreens/newPassword.dart';
-import 'package:project_yisit/authScreens/reOtpVerificationCode.dart';
 import 'package:project_yisit/json/jsonClasses.dart';
-
 import '../services/client.dart';
 
 class VerificationCode extends StatefulWidget {
-  static String id = 'verification_code';
+ 
+
   var uuid;
   var email;
   VerificationCode({this.uuid, this.email}) {
@@ -56,11 +55,14 @@ class _VerificationCodeState extends State<VerificationCode> {
         // todo;;;;;;;;;; check the otp in mail with entered otp
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => NewPassword(
+          PageTransition(
+            child: NewPassword(
               email: widget.email,
               OtpCode: recievedOtp,
             ),
+            type: PageTransitionType.fade,
+            isIos: true,
+            duration: Duration(milliseconds: 900),
           ),
         );
       } else {

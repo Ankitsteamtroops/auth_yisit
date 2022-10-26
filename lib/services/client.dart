@@ -12,11 +12,17 @@ class AuthClient {
   Future<dynamic> postRegister(String api, dynamic object) async {
     var url = Uri.parse(baseUrl + api);
     var _data = json.encode(object);
+    // var messageEmail;
+
     var _header = {
       'Content-Type': 'application/json',
     };
     var response = await client.post(url, body: _data, headers: _header);
     print(response.body);
+    // var hey = jsonDecode(response.body);
+    // print("helllo hiii $hey");
+    // messageEmail = hey["Message"]["email"];
+    // print(messageEmail);
 
     // if (response.statusCode == 200 || response.statusCode == 201) {
     //   return response;

@@ -1,11 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:project_yisit/authScreens/signUp2.dart';
 import 'package:project_yisit/json/jsonClasses.dart';
 import '../services/client.dart';
 import 'verificationCode.dart';
 
 class ForgotPassword extends StatefulWidget {
-  static String id = "forgotPassword";
+ 
+  // var uuid = SignUpPage2.userid;
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
@@ -17,15 +19,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   var data;
   void resendOtp({String? email}) async {
     // just put here the email and userid
-
     try {
       var _otpResend = OtpResend(
         email: email,
         userId: "",
       );
-
       //here xheck the endpoint
-
       var response =
           await AuthClient().postResendCode('/resend-otp', _otpResend);
       print(response);
@@ -37,7 +36,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         await Future.delayed(Duration(seconds: 1));
         if (EmailValidator.validate(emailController.text.trim())) {
           if (response.email == emailController.text.trim()) {
-            Navigator.pushNamed(context, VerificationCode.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VerificationCode(),
+              ),
+            );
           }
         }
       }

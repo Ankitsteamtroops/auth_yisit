@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:project_yisit/authScreens/homepage.dart';
 import 'package:project_yisit/authScreens/signUp.dart';
 import 'package:project_yisit/services/client.dart';
@@ -10,7 +11,6 @@ import '../json/jsonClasses.dart';
 import 'forgotPassword.dart';
 
 class SignIn extends StatefulWidget {
-  static String id = "signInPage";
   @override
   State<SignIn> createState() => _SignInState();
 }
@@ -46,8 +46,11 @@ class _SignInState extends State<SignIn> {
           if (userEmail == usernameController.text.trim()) {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
+                PageTransition(
+                  child: HomePage(),
+                  type: PageTransitionType.fade,
+                  isIos: true,
+                  duration: Duration(milliseconds: 900),
                 ),
                 (route) => false);
           }
@@ -220,9 +223,11 @@ class _SignInState extends State<SignIn> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(
-                      onTap: () => Navigator.pushNamed(
+                      onTap: () => Navigator.push(
                         context,
-                        ForgotPassword.id,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPassword(),
+                        ),
                       ),
                       child: Container(
                         height: 18,
@@ -335,9 +340,11 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.pushNamed(
+                            onTap: () => Navigator.push(
                               context,
-                              SignUpPage.id,
+                              MaterialPageRoute(
+                                builder: (context) => SignUpPage(),
+                              ),
                             ),
                             child: Container(
                               height: 20,
